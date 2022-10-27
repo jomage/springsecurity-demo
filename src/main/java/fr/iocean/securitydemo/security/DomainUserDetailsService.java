@@ -3,6 +3,8 @@ package fr.iocean.securitydemo.security;
 import fr.iocean.securitydemo.domain.Authority;
 import fr.iocean.securitydemo.domain.User;
 import fr.iocean.securitydemo.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 @Service
 public class DomainUserDetailsService implements UserDetailsService {
 
+    private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
+
     @Autowired
     UserRepository userRepository;
 
@@ -38,6 +42,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("Authenticating {}", username);
         return createSpringSecurityUser(userRepository.findFirstByLogin(username));
     }
 

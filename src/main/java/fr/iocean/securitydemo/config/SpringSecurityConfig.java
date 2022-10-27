@@ -1,5 +1,8 @@
 package fr.iocean.securitydemo.config;
 
+import fr.iocean.securitydemo.jwt.JWTConfigurer;
+import fr.iocean.securitydemo.jwt.JWTTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -9,6 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
 public class SpringSecurityConfig {
+
+    @Autowired
+    private JWTTokenProvider jwtTokenProvider;
 
     /**
      * Va intercepter les requêtes HTTP et les fait passer à travers une chaîne de filtres
@@ -33,7 +39,10 @@ public class SpringSecurityConfig {
                 // on pourrait par ex. demander une authentification pour toutes les autres requêtes :
                 //.anyRequest().authenticated()
             )
-            .httpBasic(); // on active l'authentification "Basic Authentication"
+            .httpBasic() // on active l'authentification "Basic Authentication"
+            .and()
+                .apply(securityConfigurerAdapter()) // on applique le filtre qui check le JWT
+        ;
 
         return http.build();
     }
@@ -43,5 +52,9 @@ public class SpringSecurityConfig {
         // si on veut totalement outrepasser l'encodage :
         // return NoOpPasswordEncoder.getInstance();
         return new BCryptPasswordEncoder();
+    }
+
+    private JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(jwtTokenProvider);
     }
 }
