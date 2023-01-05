@@ -23,6 +23,7 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+//            .cors().and()
 //            .cors().disable()
             .csrf().disable() // obligé de désactiver la protection csrf pour tester en local avec postman.
             .authorizeRequests((authorize) -> authorize
