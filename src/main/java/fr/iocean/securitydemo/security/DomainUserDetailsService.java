@@ -38,7 +38,12 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return createSpringSecurityUser(userRepository.findFirstByLogin(username));
+        User user = userRepository.findFirstByLogin(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("Login non trouvé");
+        }
+
+        return createSpringSecurityUser(user);
     }
 
     /**

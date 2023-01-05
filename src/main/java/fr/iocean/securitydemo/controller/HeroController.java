@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/hero")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HeroController {
 
     @GetMapping

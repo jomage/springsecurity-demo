@@ -5,6 +5,7 @@ import fr.iocean.securitydemo.domain.User;
 import fr.iocean.securitydemo.exception.UsernameAlreadyExistsException;
 import fr.iocean.securitydemo.repository.AuthorityRepository;
 import fr.iocean.securitydemo.repository.UserRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,5 +55,14 @@ public class UserService {
         newUser.setAuthorities(authorities);
 
         return userRepository.save(newUser);
+    }
+
+    public User getUserByLogin(String login) {
+        User user = userRepository.findFirstByLogin(login);
+        if (user == null) {
+            throw new UsernameNotFoundException("Login non trouvé");
+        }
+
+        return user;
     }
 }
