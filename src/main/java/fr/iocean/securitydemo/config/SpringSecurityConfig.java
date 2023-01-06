@@ -40,8 +40,8 @@ public class SpringSecurityConfig {
                 // on pourrait par ex. demander une authentification pour toutes les autres requêtes :
                 //.anyRequest().authenticated()
             )
-            .httpBasic() // on active l'authentification "Basic Authentication"
-            .and()
+//            .httpBasic() // plus besoin de basic auth avec JWT
+//            .and()
                 .apply(securityConfigurerAdapter()) // on applique le filtre qui check le JWT
         ;
 
